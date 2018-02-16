@@ -33,7 +33,6 @@ def get_all_users():
             topics = details['items'][3]['value']
             career = details['items'][4]['value']
         except IndexError:
-            # Maybe `continue` here?
             continue
             #return str('User with id {} has not filled every detail'.format(attendant_id))
 
