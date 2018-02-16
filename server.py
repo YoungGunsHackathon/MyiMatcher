@@ -1,11 +1,12 @@
 import numpy as np
-from flask import Flask
+from flask import Flask, render_template
 import urllib.request
 import requests
 import json
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
-
+Bootstrap(app)
 
 BASE_URL = 'http://svc.hackathon.getmyia.com/hackathon/'
 EVENT_ID = 'a49270cb-43b8-47fd-9b38-7bee69bc3dbaeve'
@@ -41,9 +42,17 @@ def get_all_users():
     return json.dumps([ob.__dict__ for ob in attendants])
 
 
+@app.route("/num_of_attendants")
+def num_of_attendants():
+    ''' Endpoint for retrieving number of people attending Event
+    '''
+    ids = get_users_id()
+    ids = json.loads(ids)
+    return len(ids['profileIds'])
+
 @app.route("/")
 def hello():
-    return 'Yep im working'
+    return render_template('dashboard.html', event={'num': num_of_attendants()})
 
 @app.route("/get_users_id")
 def get_ids():

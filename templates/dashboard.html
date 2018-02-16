@@ -1,0 +1,35 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}Event Dashboard{% endblock %}
+
+{% block scripts %}
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+
+{% block navbar %}
+<div class="navbar-inverse navbar" style="margin-bottom:65px">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand">Singularity University Summit</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="wrapper container-fluid">
+
+  <!-- Chart One -->
+  <div id="chart"></div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <!-- Weather -->
+        <div><h2>Number of attendants: {{event.num}}<h2></div>
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <div></div>
+      </div>
+    </div>
+
+
+</div>
+{% endblock %}
