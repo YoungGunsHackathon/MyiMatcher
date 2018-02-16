@@ -3,25 +3,92 @@ from flask import Flask, render_template
 import urllib.request
 import requests
 import json
+import urllib
 from flask_bootstrap import Bootstrap
+import binascii, os
 
 app = Flask(__name__)
 Bootstrap(app)
 
-BASE_URL = 'http://svc.hackathon.getmyia.com/hackathon/'
-EVENT_ID = 'a49270cb-43b8-47fd-9b38-7bee69bc3dbaeve'
+BASE_URL = 'https://svc.hackathon.getmyia.com/hackathon/'
+EVENT_ID = 'cb979966-6190-4d97-be3d-a550602cc0b7eve' #'a49270cb-43b8-47fd-9b38-7bee69bc3dbaeve'
+LAST_TIMESTAMP = str(636544060624517788)
+TOKEN = '2fadf2df-5f38-4736-872a-6a063ee6b031tkn'
+BOT_DEVICE_ID = '3bbe0ed2-91ac-4c77-b79d-9b5abb7e822a'
+DEMO_USER_ID = 'vitkovo id'
+THREAD_ID_DICT = {}
+
+def add_to_dict(key, value):
+    ''' Function for updating user:thread dictionary
+    '''
+    THREAD_ID_DICT[key] = value
+
+@app.route('/chatbot_connect')
+def chatbot_connect():
+    ''' Function for creating chatbot and storing its ID
+    '''
+    DEVICE_ID = binascii.hexlify(os.urandom(16)).decode('ascii')
+
+    payload = {
+        "token": TOKEN,
+        "deviceId": DEVICE_ID,
+        "name": "Lovely Myia"
+    }
+    BOT_DEVICE_ID = DEVICE_ID
+    r = requests.post(url = BASE_URL + 'chatbotconnect', json=payload)
+    if r.status_code is not 200:
+        raise API_Exception
+    return 'OK'
+
+@app.route('/create_thread/<recipient_id>')
+def create_thread(recipient_id):
+    ''' Function for creating thread between bot and attendant
+    '''
+    payload = {
+        'deviceId': BOT_DEVICE_ID,
+        'withProfileId': recipient_id
+    }
+
+    headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+    r = requests.post(url = BASE_URL + 'place/' + EVENT_ID + '/thread', json = payload)
+    if r.status_code is not 200:
+        raise API_Exception
+    add_to_dict(recipient_id, json.loads(r.text)['threadId'])
+    return json.loads(r.text)['threadId']
+
+@app.route('/create_message/<message>/<thread_id>')
+def create_message(message, thread_id):
+    ''' Function for pushing message to thread
+    '''
+
+    payload = {
+        'deviceId': BOT_DEVICE_ID,
+        'text': message
+    }
+    r = requests.post(url = BASE_URL + 'place/' + EVENT_ID + '/thread/' + thread_id + '/message', json=payload)
+    if r.status_code is not 200:
+        return str(message)
+    return 'OK'
+
+
 
 @app.route('/match/<user_id>')
 def match(user_id):
     ''' Endpoint for matching desired user with closest attendants
     '''
     # TODO MAGIC
+    # Call function from matcher.py
 
-@app.route('/get_all_users')
-def get_all_users():
+
+# if when == now , return only new, when all, return all
+@app.route('/get_all_users/<when>')
+def get_all_users(when):
     ''' Endpoint for retrieving all users and their informations as Attendant class
     '''
-    ids = get_users_id()
+    if when == 'new':
+        ids = get_users_id_ts(LAST_TIMESTAMP)
+    else:
+        ids = get_users_id()
     ids = json.loads(ids)
     attendants = []
 
@@ -86,7 +153,19 @@ def get_users_id():
     users_id = requests.get(BASE_URL + 'place/' + EVENT_ID + '/activeusers')
     if users_id.status_code is not 200:
         raise API_Exception
-    return users_id.content.decode('utf-8')
+    res = users_id.content.decode('utf-8')
+    LAST_TIMESTAMP = json.loads(res)['lastStamp']
+    return res
+
+def get_users_id_ts(timestamp):
+    ''' Function for retrieving new users after time defined in timestamp
+    '''
+    users_id = requests.get(BASE_URL + 'place/' + EVENT_ID + '/activeusers?lastStamp=' + timestamp)
+    if users_id.status_code is not 200:
+        raise API_Exception
+    res = users_id.content.decode('utf-8')
+    LAST_TIMESTAMP = json.loads(res)['lastStamp']
+    return res
 
 
 class API_Exception(Exception):
