@@ -3,9 +3,10 @@ from flask import Flask, render_template
 import urllib.request
 import requests
 import json
-import urllib
+from urllib.parse import quote
 from flask_bootstrap import Bootstrap
 import binascii, os
+from matcher import Matcher
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -23,9 +24,14 @@ def add_to_dict(key, value):
     '''
     THREAD_ID_DICT[key] = value
 
+@app.route('/test')
+def test():
+    match = Matcher(get_all_users('new'))
+    return match.test()
+
 @app.route('/chatbot_connect')
 def chatbot_connect():
-    ''' Function for creating chatbot and storing its ID
+    ''' Function for creating chatbot and storing its ID, only called once per event
     '''
     DEVICE_ID = binascii.hexlify(os.urandom(16)).decode('ascii')
 
@@ -182,4 +188,9 @@ class Attendant:
 
 
 # 0.0.0.0 so it can be visible from local network
+message = '''
+Chcete propojit s p. Novakem?
+<div style="margin-top: 10px"><button style="background: #222 url('css/themes/dark/img/voteUp.svg') no-repeat center center;background-size:64px 64px;width:55px;height:55px;padding: 0;margin-right: 10px;display:inline-block" onclick="this.style.backgroundImage = 'url(css/themes/dark/img/voteUpSelected.svg)';angular.element(document.body).injector().get('xinClientService').getData('https:'+'//centrum.cz', 'GET')"></button><button style="background: #222 url('css/themes/dark/img/voteDown.svg') no-repeat center center;background-size:64px 64px;width:55px;height:55px;padding: 0;margin-right: 10px;display:inline-block" onclick="this.style.backgroundImage = 'url(css/themes/dark/img/voteDownSelected.svg)';angular.element(document.body).injector().get('xinClientService').getData('https:'+'//centrum.cz', 'GET')"></button></div>
+'''
+create_message(message, '260633a2-4546-4805-a69a-29cf6fb7bdf0thr')
 app.run(debug=True, host='0.0.0.0')
