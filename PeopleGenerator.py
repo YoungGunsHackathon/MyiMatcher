@@ -13,7 +13,7 @@ import random
 import numpy.random as npr
 
 def getInterestArray():
-    return random.sample(range(0, 20), random.randint(1,11))
+    return random.sample(range(0, 20), random.randint(1,5))
 
 def getCarArray():
     chance = npr.rand()
@@ -32,14 +32,14 @@ def getRandomUser(devId):
 
     return {
         'deviceId': devId,
-        'placeId': 'a49270cb-43b8-47fd-9b38-7bee69bc3dbaeve',
+        'placeId': placeId,
         'items': [
             {
                 'id': 0,
                 'caption': 'Photo',
                 'type': 2,
                 'semanticType': 4,
-                'value': 'https://myiahackathon.blob.core.windows.net:443/profile-pic/tn/e89c6db9-3bbd-4389-8ccb-b19c2ef52db1cli?v=1518793324668'
+                'value': 'https://source.unsplash.com/random/400x400?sig=123'
             },
             {
                 'id': 1,
@@ -182,9 +182,9 @@ import os
 import json
 import binascii
 
-for i in range(0, 50):
+for i in range(0, 20):
     devId = binascii.hexlify(os.urandom(16)).decode('ascii')
-    stringConnect = {'deviceId': devId, 'placeToken': '48e52716-a674-49ee-aba5-4094f500c7a7tkn'}
+    stringConnect = {'deviceId': devId, 'placeToken': placeToken}
 
     headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
 
