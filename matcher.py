@@ -5,28 +5,32 @@ import json
 
 class Matcher:
 
-    def edit_topics(arr):
+    def edit_topics(self, arr):
         ''' Encode topic array to binary vector
         '''
         zeros = np.zeros(20)
         for x in range(len(arr)):
-            index = users.topics[x]
+            index = arr[x]
             zeros[index] = 1
         return zeros
 
     def __init__(self, users):
+        self.users = self.objects_from_json(users)
+        for user in self.users:
+            user.topics = self.edit_topics(user.topics)
+
+    def objects_from_json(self, raw):
+        ''' Function for creating objects from json
+        '''
+        js = raw.replace("\\", "")
+        js = json.loads(js)
         attendants = []
-        self.users = users
-        for user in users:
-            usr = json.dumps(user)
-            attendant = Attendant(usr['fname'], usr['lname'], self.edit_topics['topics'], self.edit_topics['career'])
-            self.attendants.append(attendant)
+        for x in range(len(js)):
+            attendants.append(Attendant(js[x]['fname'], js[x]['lname'], js[x]['topics'], js[x]['career']))
+        return attendants
 
-
-
-
-    def test():
-        return str(attendants[0].lname)
+    def test(self):
+        return str(self.users[0].topics)
 
 
 class Attendant:
