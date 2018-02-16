@@ -2,7 +2,22 @@
 {% block title %}Event Dashboard{% endblock %}
 
 {% block scripts %}
+  <script type="text/javascript" src="{{ url_for('static', filename='countUp.js') }}"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script>
+  var options = {
+    useEasing: true,
+    useGrouping: true,
+    separator: ',',
+    decimal: '.',
+  };
+  var demo = new CountUp('visitors', 0, {{event.num}}, 0, 2.5, options);
+  if (!demo.error) {
+    demo.start();
+  } else {
+    console.error(demo.error);
+  }
+  </script>
 {% endblock %}
 
 {% block navbar %}
@@ -21,9 +36,10 @@
   <!-- Chart One -->
   <div id="chart"></div>
     <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="col-xs-12 center-block text-center">
         <!-- Weather -->
-        <div><h2>Number of attendants: {{event.num}}<h2></div>
+        <h2>Number of attendants: <h2>
+        <h2 id="visitors">0<h2>
       </div>
       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
         <div></div>

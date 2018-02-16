@@ -34,7 +34,8 @@ def get_all_users():
             career = details['items'][4]['value']
         except IndexError:
             # Maybe `continue` here?
-            return str('User with id {} has not filled every detail'.format(attendant_id))
+            continue
+            #return str('User with id {} has not filled every detail'.format(attendant_id))
 
         attendant = Attendant(fname, lname, topics, career)
         attendants.append(attendant)
@@ -52,6 +53,8 @@ def num_of_attendants():
 
 @app.route("/")
 def hello():
+    ''' Main endpoint at / for dashboard UI
+    '''
     return render_template('dashboard.html', event={'num': num_of_attendants()})
 
 @app.route("/get_users_id")
