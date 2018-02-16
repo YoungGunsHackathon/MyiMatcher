@@ -4,13 +4,17 @@ import urllib.request
 import requests
 import json
 
-
 app = Flask(__name__)
 
 
 BASE_URL = 'http://svc.hackathon.getmyia.com/hackathon/'
 EVENT_ID = 'a49270cb-43b8-47fd-9b38-7bee69bc3dbaeve'
 
+@app.route('/match/<user_id>')
+def match(user_id):
+    ''' Endpoint for matching desired user with closest attendants
+    '''
+    # TODO MAGIC
 
 @app.route('/get_all_users')
 def get_all_users():
@@ -28,13 +32,14 @@ def get_all_users():
             topics = details['items'][3]['value']
             career = details['items'][4]['value']
         except IndexError:
+            # Maybe `continue` here?
             return str('User with id {} has not filled every detail'.format(attendant_id))
 
         attendant = Attendant(fname, lname, topics, career)
         attendants.append(attendant)
 
     return json.dumps([ob.__dict__ for ob in attendants])
-    
+
 
 @app.route("/")
 def hello():
