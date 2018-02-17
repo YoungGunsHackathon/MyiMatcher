@@ -2,7 +2,7 @@
 Myia matchbot is an extension for Myia mobile app. It adds functionality that matches event attendees based on their interests and motivates them to connect and meet at the event.
 
 # Key Features
-  - Matching engine using advanced AI technologies.
+  - Matching engine using dimensionality reduction.
   - Seamless experience of connecting with other people.
   - Get introduced with other interesting event attendees with common interests.
 
