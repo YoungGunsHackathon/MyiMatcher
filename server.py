@@ -186,11 +186,17 @@ class Attendant:
         self.topics = topics
         self.career = career
 
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
+
 
 # 0.0.0.0 so it can be visible from local network
 message = '''
 Chcete propojit s p. Novakem?
 <div style="margin-top: 10px"><button style="background: #222 url('css/themes/dark/img/voteUp.svg') no-repeat center center;background-size:64px 64px;width:55px;height:55px;padding: 0;margin-right: 10px;display:inline-block" onclick="this.style.backgroundImage = 'url(css/themes/dark/img/voteUpSelected.svg)';angular.element(document.body).injector().get('xinClientService').getData('https:'+'//centrum.cz', 'GET')"></button><button style="background: #222 url('css/themes/dark/img/voteDown.svg') no-repeat center center;background-size:64px 64px;width:55px;height:55px;padding: 0;margin-right: 10px;display:inline-block" onclick="this.style.backgroundImage = 'url(css/themes/dark/img/voteDownSelected.svg)';angular.element(document.body).injector().get('xinClientService').getData('https:'+'//centrum.cz', 'GET')"></button></div>
 '''
-create_message(message, '260633a2-4546-4805-a69a-29cf6fb7bdf0thr')
+#create_message(message, '260633a2-4546-4805-a69a-29cf6fb7bdf0thr')
 app.run(debug=True, host='0.0.0.0')
