@@ -8,16 +8,14 @@ def create_intro_msg(name):
     return intro + " " + continuation
 
 
-def create_suggestion_msg(your_id, match_name, interest1, interest2, interest3, addition):
-    msg_first = match_name + " shares these interests: \n<br/>" + " - " + interest1 + "\n<br/>" + " - " + interest2 + "\n<br/>" + " - " + interest3 + ".<br/>"
+def create_suggestion_msg(id, match_name, interest1, interest2, interest3, addition):
+    msg_first = match_name + " shares these interests: \n<br/>" + " - " + interest1 + "\n<br/>" + " - " + interest2 + "\n<br/>" + " - " + interest3 + "<br/>"
 
-    buttons = """<div style="margin-top: 10px">
-            <button style="background: #222 url('css/themes/dark/img/voteUp.svg') no-repeat center center;background-size:64px 64px;width:55px;height:55px;padding: 0;margin-right: 10px;display:inline-block" onclick="this.style.backgroundImage = 'url(css/themes/dark/img/voteUpSelected.svg)';angular.element(document.body).injector().get('xinClientService').getData('http:' +'//10.37.1.217:5000/respond/kjkjddddkjk', 'GET')">
-            </button>
-            <button style="background: #222 url('css/themes/dark/img/voteDown.svg') no-repeat center center;background-size:64px 64px;width:55px;height:55px;padding: 0;margin-right: 10px;display:inline-block" onclick="this.style.backgroundImage = 'url(css/themes/dark/img/voteDownSelected.svg)';angular.element(document.body).injector().get('xinClientService').getData('http:' +'//10.37.1.217:5000/respond/kjkjddkjk', 'GET')">
-            </button>
-            </div>"""
-
+    buttons = """Do you want to connect with your match?
+            <div style="margin-top: 10px">
+            <button style="background: #222 url('css/themes/dark/img/voteUp.svg') no-repeat center center;background-size:64px 64px;width:55px;height:55px;padding: 0;margin-right: 10px;display:inline-block" onclick="this.style.backgroundImage = 'url(css/themes/dark/img/voteUpSelected.svg)';angular.element(document.body).injector().get('xinClientService').getData('http:' +'//10.37.1.217:5000/respond/{0}/{1}', 'GET')"></button><button style="background: #222 url('css/themes/dark/img/voteDown.svg') no-repeat center center;background-size:64px 64px;width:55px;height:55px;padding: 0;margin-right: 10px;display:inline-block" onclick="this.style.backgroundImage = 'url(css/themes/dark/img/voteDownSelected.svg)';angular.element(document.body).injector().get('xinClientService').getData('etwas' , 'GET')"></button>
+            </div>""".format(id, match_name)
+    msg_cont = ""
     if (addition == 0):
         msg_cont = ""
     elif (addition == 1):
@@ -30,7 +28,7 @@ def create_suggestion_msg(your_id, match_name, interest1, interest2, interest3, 
         msg_cont = "In addition, " + match_name + " is looking for investors!<br/>"
 
 
-    return msg_first + msg_cont + buttons
+    return msg_first + '\n' + msg_cont + buttons
 
 def connected():
     return 'Wow you are now connected with Josef!'

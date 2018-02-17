@@ -13,25 +13,42 @@ app = Flask(__name__)
 Bootstrap(app)
 
 BASE_URL = 'https://svc.hackathon.getmyia.com/hackathon/'
-EVENT_ID = 'd4b90c0d-9862-4916-8190-335803032238eve' #'a49270cb-43b8-47fd-9b38-7bee69bc3dbaeve'
+EVENT_ID = '9aa7d291-3938-437b-9f3e-8c4583459c58eve' #'a49270cb-43b8-47fd-9b38-7bee69bc3dbaeve'
 LAST_TIMESTAMP = str(636544271663550596)
-TOKEN = '95811c85-6872-4127-bebb-8c0417ed3c3dtkn'
-BOT_DEVICE_ID = '3bbe0ed2-91ac-4c77-b79d-9b5abb7e822a'
+TOKEN = '818cad3c-9383-4865-81d5-05d34b06923etkn'
+BOT_DEVICE_ID = 'c6aa0c8e-70fd-457b-aa7d-89fb559f3281'
 THREAD_ID_DICT = {}
+thr_id = ''
 
 def add_to_dict(key, value):
     ''' Function for updating user:thread dictionary
     '''
     THREAD_ID_DICT[key] = value
 
+@app.route('/append/<user_id>')
+def append_user_to_thread(user_id):
+    t_id = create_thread(user_id)
+
+    payload = {
+        'deviceId': BOT_DEVICE_ID,
+        'profileId': '1cc0fde5-9db4-4437-b9ce-948771081875cli'
+    }
+
+    r = requests.post(url = BASE_URL + 'place/' + EVENT_ID + '/thread/' + t_id, json=payload)
+    if r.status_code is not 200:
+        return str(r.status_code)
+    create_message('Hello guys, you seems to have very familiar interests, have a talk!', t_id)
+    return 'OK'
+
 @app.route('/test')
 def test():
     match = Matcher(get_all_users('new'))
     return match.test()
 
-@app.route('/respond/<recipient_id>')
-def respond(recipient_id):
-    create_message(connected(), 'e06c8ebc-533e-4430-8e6b-60eaa56d455fthr')
+@app.route('/respond/<recipient_id>/<recipient_name>')
+def respond(recipient_id, recipient_name):
+    create_message('Awesome! Connecting you with ' + recipient_name + ', check your inbox and have fun!', thr_id)
+    append_user_to_thread(recipient_id)
     return 'OK'
 
 @app.route('/chatbot_connect')
@@ -49,7 +66,7 @@ def chatbot_connect():
     r = requests.post(url = BASE_URL + 'chatbotconnect', json=payload)
     if r.status_code is not 200:
         raise API_Exception
-    return 'OK'
+    return BOT_DEVICE_ID
 
 @app.route('/create_thread/<recipient_id>')
 def create_thread(recipient_id):
@@ -196,11 +213,11 @@ class Attendant:
 
 #d
 # 0.0.0.0 so it can be visible from local network
-message = '''
-Chcete propojit s p. Novakem?
-<div style="margin-top: 10px"><button style="background: #222 url('css/themes/dark/img/voteUp.svg') no-repeat center center;background-size:64px 64px;width:55px;height:55px;padding: 0;margin-right: 10px;display:inline-block" onclick="this.style.backgroundImage = 'url(css/themes/dark/img/voteUpSelected.svg)';angular.element(document.body).injector().get('xinClientService').getData('https:'+'//centrum.cz', 'GET')"></button><button style="background: #222 url('css/themes/dark/img/voteDown.svg') no-repeat center center;background-size:64px 64px;width:55px;height:55px;padding: 0;margin-right: 10px;display:inline-block" onclick="this.style.backgroundImage = 'url(css/themes/dark/img/voteDownSelected.svg)';angular.element(document.body).injector().get('xinClientService').getData('https:'+'//centrum.cz', 'GET')"></button></div>
-'''
 
-create_message(create_suggestion_msg('e06c8ebc-533e-4430-8e6b-60eaa56d455fthr','Josef', 'Neco', 'Neco2', 'Neco3', 1), 'e06c8ebc-533e-4430-8e6b-60eaa56d455fthr')
+thr_id = create_thread('1cc0fde5-9db4-4437-b9ce-948771081875cli')
+create_message(create_intro_msg('Josef'), thr_id)
+create_message(create_suggestion_msg('b27b031f-ec4b-4d68-9a93-18b90dcc7607cli','G. Epperson', 'Artificial Intelligence', 'Internet of Things', 'Data Science', 1), thr_id)
+create_message(create_suggestion_msg('980c5103-1350-4806-8e7b-060fb2cbd0c1cli', 'J. Cush', 'Artificial Intelligence', 'Virtual Reality', 'Internet of Things', 3), thr_id)
+
 
 app.run(debug=True, host='0.0.0.0')
