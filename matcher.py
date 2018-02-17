@@ -43,11 +43,8 @@ class Matcher:
             Y.append(user.fname + user.lname)
         X = np.array(X)
         Y = np.array(Y)
-        x_train, x_test, y_train, y_test = self.generate_training_set(X, Y)
-        np.save('x_train', x_train)
-        np.save('x_test', x_test)
-        np.save('y_train.np', y_train)
-        np.save('y_test.np', y_test)
+        np.save('X', X)
+        np.save('Y', Y)
         return 'done bitch'
 
 

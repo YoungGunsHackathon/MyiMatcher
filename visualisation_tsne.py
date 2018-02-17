@@ -3,8 +3,8 @@ from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
-X = np.load('x_train.npy')
-note = np.load('y_train.npy')
+X = np.load('X.npy')
+note = np.load('Y.npy')
 
 X_embedded = TSNE(n_components=2).fit_transform(X)
 
@@ -16,4 +16,4 @@ for x in range(X_embedded.shape[0]):
 
 for i, txt in enumerate(note):
     ax.annotate(txt, (X_embedded[i][0],X_embedded[i][1]))
-fig.savefig('foo4.png')
+fig.savefig('tsne.png')

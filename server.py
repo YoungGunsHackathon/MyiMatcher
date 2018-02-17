@@ -13,7 +13,7 @@ Bootstrap(app)
 
 BASE_URL = 'https://svc.hackathon.getmyia.com/hackathon/'
 EVENT_ID = 'cb979966-6190-4d97-be3d-a550602cc0b7eve' #'a49270cb-43b8-47fd-9b38-7bee69bc3dbaeve'
-LAST_TIMESTAMP = str(636544060624517788)
+LAST_TIMESTAMP = str(636544271663550596)
 TOKEN = '2fadf2df-5f38-4736-872a-6a063ee6b031tkn'
 BOT_DEVICE_ID = '3bbe0ed2-91ac-4c77-b79d-9b5abb7e822a'
 DEMO_USER_ID = 'vitkovo id'
