@@ -7,16 +7,16 @@ from urllib.parse import quote
 from flask_bootstrap import Bootstrap
 import binascii, os
 from matcher import Matcher
+from loop import create_intro_msg, create_suggestion_msg, connected
 
 app = Flask(__name__)
 Bootstrap(app)
 
 BASE_URL = 'https://svc.hackathon.getmyia.com/hackathon/'
-EVENT_ID = 'cb979966-6190-4d97-be3d-a550602cc0b7eve' #'a49270cb-43b8-47fd-9b38-7bee69bc3dbaeve'
+EVENT_ID = 'd4b90c0d-9862-4916-8190-335803032238eve' #'a49270cb-43b8-47fd-9b38-7bee69bc3dbaeve'
 LAST_TIMESTAMP = str(636544271663550596)
-TOKEN = '2fadf2df-5f38-4736-872a-6a063ee6b031tkn'
+TOKEN = '95811c85-6872-4127-bebb-8c0417ed3c3dtkn'
 BOT_DEVICE_ID = '3bbe0ed2-91ac-4c77-b79d-9b5abb7e822a'
-DEMO_USER_ID = 'vitkovo id'
 THREAD_ID_DICT = {}
 
 def add_to_dict(key, value):
@@ -28,6 +28,11 @@ def add_to_dict(key, value):
 def test():
     match = Matcher(get_all_users('new'))
     return match.test()
+
+@app.route('/respond/<recipient_id>')
+def respond(recipient_id):
+    create_message(connected(), 'e06c8ebc-533e-4430-8e6b-60eaa56d455fthr')
+    return 'OK'
 
 @app.route('/chatbot_connect')
 def chatbot_connect():
@@ -69,7 +74,8 @@ def create_message(message, thread_id):
 
     payload = {
         'deviceId': BOT_DEVICE_ID,
-        'text': message
+        'text': message,
+        'linkId': binascii.hexlify(os.urandom(16)).decode('ascii')
     }
     r = requests.post(url = BASE_URL + 'place/' + EVENT_ID + '/thread/' + thread_id + '/message', json=payload)
     if r.status_code is not 200:
@@ -188,11 +194,13 @@ class Attendant:
         self.career = career
         self.user_id = user_id
 
-
+#d
 # 0.0.0.0 so it can be visible from local network
 message = '''
 Chcete propojit s p. Novakem?
 <div style="margin-top: 10px"><button style="background: #222 url('css/themes/dark/img/voteUp.svg') no-repeat center center;background-size:64px 64px;width:55px;height:55px;padding: 0;margin-right: 10px;display:inline-block" onclick="this.style.backgroundImage = 'url(css/themes/dark/img/voteUpSelected.svg)';angular.element(document.body).injector().get('xinClientService').getData('https:'+'//centrum.cz', 'GET')"></button><button style="background: #222 url('css/themes/dark/img/voteDown.svg') no-repeat center center;background-size:64px 64px;width:55px;height:55px;padding: 0;margin-right: 10px;display:inline-block" onclick="this.style.backgroundImage = 'url(css/themes/dark/img/voteDownSelected.svg)';angular.element(document.body).injector().get('xinClientService').getData('https:'+'//centrum.cz', 'GET')"></button></div>
 '''
-#create_message(message, '260633a2-4546-4805-a69a-29cf6fb7bdf0thr')
+
+create_message(create_suggestion_msg('e06c8ebc-533e-4430-8e6b-60eaa56d455fthr','Josef', 'Neco', 'Neco2', 'Neco3', 1), 'e06c8ebc-533e-4430-8e6b-60eaa56d455fthr')
+
 app.run(debug=True, host='0.0.0.0')

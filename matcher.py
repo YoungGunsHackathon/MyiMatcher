@@ -1,11 +1,6 @@
 import numpy as np
 from sklearn.manifold import TSNE
 import json
-import keras
-from keras.layers import Input, Dense
-from keras.models import Model
-from keras import backend as K
-import pandas as pd
 
 
 class Matcher:
