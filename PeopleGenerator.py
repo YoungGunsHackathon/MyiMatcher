@@ -1,19 +1,29 @@
-placeToken = "48e52716-a674-49ee-aba5-4094f500c7a7tkn"
-placeId = "a49270cb-43b8-47fd-9b38-7bee69bc3dbaeve"
+placeToken = "2fadf2df-5f38-4736-872a-6a063ee6b031tkn"
+placeId = "cb979966-6190-4d97-be3d-a550602cc0b7eve"
 baseConnectURL = "https://svc.hackathon.getmyia.com/hackathon/connect"
 baseProfileSetURL = "https://svc.hackathon.getmyia.com/hackathon/myprofile/cs"
 
-personConnectRequest = """{
-  "deviceId": "stringDevId",
-  "placeToken": "48e52716-a674-49ee-aba5-4094f500c7a7tkn"
-}"""
+
 import names
 import requests
 import random
+import numpy as np
 import numpy.random as npr
+from scipy import stats
+
+def getRandomInterestDistr():
+    return npr.choice(numpy.arange(0, 20), p=[1/52, 1/52, 7/52, 2/52, 1/52, 2/52, 2/52, 7/52, 2/52, 1/52, 1/52, 2/52, 1/52, 1/52, 8/52, 1/52, 2/52, 2/52, 5/52, 3/52])
+
 
 def getInterestArray():
-    return random.sample(range(0, 20), random.randint(1,5))
+    #return random.sample(range(0, 20), random.randint(1,5))
+    array = [None] * random.randint(1,5)
+    for i in range(0, array.__len__()):
+        array[i] = int(getRandomInterestDistr())
+    return array
+
+
+print(getInterestArray())
 
 def getCarArray():
     chance = npr.rand()
@@ -182,7 +192,7 @@ import os
 import json
 import binascii
 
-for i in range(0, 20):
+for i in range(0, 50):
     devId = binascii.hexlify(os.urandom(16)).decode('ascii')
     stringConnect = {'deviceId': devId, 'placeToken': placeToken}
 
