@@ -3,7 +3,7 @@ Miya matchbot is an extension for Miya mobile app. It adds functionality that ma
 
 # Key Features
   - Matching engine using advanced AI technologies.
-  - Seemless experience of connecting with other people.
+  - Seamless experience of connecting with other people.
   - Get introduced with other interesting event attendees with common interests.
 
 # Usage
@@ -13,4 +13,4 @@ Miya matchbot is an extension for Miya mobile app. It adds functionality that ma
 
 # Development notes
   - This module was created on Deloitte YoungGuns Hackathon, 2018
-  - Under "Unlicended" licence.
+  - Under "Unlicensed" license.
