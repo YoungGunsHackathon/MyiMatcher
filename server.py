@@ -105,11 +105,12 @@ def get_all_users(when):
             lname = details['items'][2]['value']
             topics = details['items'][3]['value']
             career = details['items'][4]['value']
+            user_id = attendant_id
         except IndexError:
             continue
             #return str('User with id {} has not filled every detail'.format(attendant_id))
 
-        attendant = Attendant(fname, lname, topics, career)
+        attendant = Attendant(fname, lname, topics, career, user_id)
         attendants.append(attendant)
 
     return json.dumps([ob.__dict__ for ob in attendants])
@@ -180,17 +181,12 @@ class API_Exception(Exception):
 class Attendant:
     ''' Data class representing one event Attendant
     '''
-    def __init__(self, fname, lname, topics, career):
+    def __init__(self, fname, lname, topics, career, user_id):
         self.fname = fname
         self.lname = lname
         self.topics = topics
         self.career = career
-
-class NumpyEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, np.ndarray):
-            return obj.tolist()
-        return json.JSONEncoder.default(self, obj)
+        self.user_id = user_id
 
 
 # 0.0.0.0 so it can be visible from local network
